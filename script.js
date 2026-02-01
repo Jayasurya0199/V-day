@@ -3,18 +3,33 @@ const noButton = document.getElementById("no-button");
 const finalMessage = document.getElementById("final-message");
 const body = document.body;
 
-// ==================== No Button Runs Away (Desktop + Mobile) ====================
+// ==================== No Button Runs Away (Faster & Smoother) ====================
 function moveNoButton() {
-    const x = Math.floor(Math.random() * 200) - 100;
-    const y = Math.floor(Math.random() * 200) - 100;
-    noButton.style.transform = `translate(${x}px, ${y}px)`;
+    const buttonRect = noButton.getBoundingClientRect();
+    const bodyRect = body.getBoundingClientRect();
+
+    // Max X and Y so button stays inside viewport
+    const maxX = bodyRect.width - buttonRect.width - 20; // 20px margin
+    const maxY = bodyRect.height - buttonRect.height - 20;
+
+    // Generate random new position (farther jumps for faster movement)
+    const newX = Math.random() * maxX;
+    const newY = Math.random() * maxY;
+
+    // Apply transform for smooth GPU-accelerated movement
+    noButton.style.transform = `translate(${newX}px, ${newY}px)`;
 }
 
-// Desktop hover
+// Desktop: move on mouseover
 noButton.addEventListener("mouseover", moveNoButton);
 
-// Mobile touch
+// Mobile: move on touch
 noButton.addEventListener("touchstart", moveNoButton);
+
+// Optional: extra speed by moving multiple times per hover
+noButton.addEventListener("mouseover", () => {
+    for (let i = 0; i < 2; i++) moveNoButton();
+});
 
 // ==================== Yes Button Click ====================
 yesButton.addEventListener("click", () => {
@@ -57,31 +72,4 @@ setInterval(createHeart, 500);
 
 // ==================== Heart Explosion Function ====================
 function createExplosionHeart(x, y) {
-    const heart = document.createElement("div");
-    heart.classList.add("heart");
-
-    const size = Math.random() * 20 + 15;
-    heart.style.width = size + "px";
-    heart.style.height = size + "px";
-    heart.style.background = `linear-gradient(45deg, #ff4d79, #ff99cc)`;
-    heart.style.left = x - size/2 + "px";
-    heart.style.top = y - size/2 + "px";
-    heart.style.position = "absolute";
-    heart.style.transition = "transform 1.5s ease-out, opacity 1.5s ease-out";
-
-    body.appendChild(heart);
-
-    const angle = Math.random() * 2 * Math.PI;
-    const distance = Math.random() * 200 + 100;
-    const destX = distance * Math.cos(angle);
-    const destY = distance * Math.sin(angle);
-
-    setTimeout(() => {
-        heart.style.transform = `translate(${destX}px, ${destY}px) scale(0.5) rotate(${Math.random()*360}deg)`;
-        heart.style.opacity = 0;
-    }, 50);
-
-    setTimeout(() => {
-        heart.remove();
-    }, 1600);
-}
+    const heart = document.createEle
