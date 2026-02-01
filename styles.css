@@ -1,7 +1,7 @@
 /* ==================== Body & Background ==================== */
 body {
   font-family: "Poppins", sans-serif;
-  background: linear-gradient(135deg, #ff758c, #ff7eb3); /* romantic pink gradient */
+  background: linear-gradient(135deg, #ff758c, #ff7eb3);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -9,7 +9,7 @@ body {
   margin: 0;
   font-size: 35px;
   color: #ff00ae;
-  overflow: hidden;
+  overflow: hidden; /* Keep hearts inside viewport */
 }
 
 /* ==================== Soft Glass Container ==================== */
@@ -30,7 +30,7 @@ body .container {
 
 /* ==================== Heading & Paragraph ==================== */
 .hh {
-  font-family: "Great Vibes", cursive; /* Fancy romantic font */
+  font-family: "Great Vibes", cursive;
   font-size: 65px;
   color: #ff007f;
   text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
