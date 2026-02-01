@@ -1,84 +1,81 @@
-function showMessage(response) {
-  let videoPlayed = false;
-  if (response === "No") {
-    const noButton = document.getElementById("no-button");
-    const maxWidth = window.innerWidth - noButton.offsetWidth;
-    const maxHeight = window.innerHeight - noButton.offsetHeight;
+const yesButton = document.getElementById("yes-button");
+const noButton = document.getElementById("no-button");
+const finalMessage = document.getElementById("final-message");
+const body = document.body;
 
-    // Set the button position to absolute
-    noButton.style.position = "absolute";
+// ==================== No Button Runs Away ====================
+noButton.addEventListener("mouseover", () => {
+    const x = Math.floor(Math.random() * 200) - 100;
+    const y = Math.floor(Math.random() * 200) - 100;
+    noButton.style.transform = `translate(${x}px, ${y}px)`;
+});
 
-    // Change the image source to "gun.gif"
-    document.getElementsByClassName("image")[0].src = "images/gun.gif";
+// ==================== Yes Button Click ====================
+yesButton.addEventListener("click", () => {
+    finalMessage.style.display = "block";
 
-    // Generate random coordinates within the visible container
-    const randomX = Math.max(0, Math.floor(Math.random() * maxWidth));
-    const randomY = Math.max(0, Math.floor(Math.random() * maxHeight));
+    // Center of container
+    const container = document.querySelector(".container");
+    const rect = container.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
 
-    // Apply the new coordinates to the button
-    noButton.style.left = randomX + "px";
-    noButton.style.top = randomY + "px";
-
-    // Update text content and hide the name message
-    document.getElementById("question").textContent =
-      "Choose wisely";
-    document.getElementById("name").style.display = "none";
-
-    // Add a mouseover event listener to the "No" button
-    noButton.addEventListener("mouseover", () => {
-      if (!videoPlayed) {
-        const videoElement = document.createElement("video");
-        videoElement.src = "./Maroon 5 - Sugar.mp4#t=42";
-        videoElement.autoplay = true;
-        videoElement.controls = false;
-        document.body.appendChild(videoElement);
-        videoElement.style.position = "fixed";
-        videoElement.style.top = "40%";
-        videoElement.style.left = "50%";
-        videoElement.style.transform = "translate(-50%, -50%)";
-        videoElement.style.width = "700px"
-        document.body.appendChild(videoElement);
-        // Set the flag to true after playing the video
-        videoPlayed = true;
-      }
-
-      // Generate new random coordinates when the button is hovered
-      const randomX = Math.max(0, Math.floor(Math.random() * maxWidth));
-      const randomY = Math.max(0, Math.floor(Math.random() * maxHeight));
-
-      noButton.style.zIndex = "100";
-      // Apply new coordinates to the button, causing it to move
-      noButton.style.left = randomX + "px";
-      noButton.style.top = randomY + "px";
-    });
-  }
-
-  if (response === "Yes") {
-    // Remove the name message and the "No" button
-    document.getElementById("name").remove();
-    document.getElementById("no-button").remove();
-    const videoElement = document.querySelector("video");
-    if (videoElement) {
-      videoElement.pause();
-      videoElement.remove();
+    // Explosion of 30 hearts
+    for (let i = 0; i < 30; i++) {
+        createExplosionHeart(centerX, centerY);
     }
+});
 
-    // Create an audio element to play the sound
-    const audioElement = document.createElement("audio");
-    audioElement.src = "./Minions Cheering.mp3"; // Source of the sound
-    audioElement.preload = "auto"; // Preloading the audio
-    audioElement.play() // Play the sound
-      .catch(e => console.error("Audio playback failed:", e)); // Catch and log playback errors
+// ==================== Floating Background Hearts ====================
+function createHeart() {
+    const heart = document.createElement("div");
+    heart.classList.add("heart");
 
-    // Update the text content, display the message, and change the image to "dance.gif"
-    const yesMessage = document.getElementById("question");
-    yesMessage.textContent = "See you on the 14th my princess";
-    yesMessage.style.display = "block";
-    yesMessage.style.fontStyle = "normal";
-    document.getElementsByClassName("image")[0].src = "images/dance.gif";
+    heart.style.left = Math.random() * window.innerWidth + "px";
+    heart.style.bottom = "-50px";
 
-    // Remove the "Yes" button
-    document.getElementById("yesButton").remove();
-  }
+    const size = Math.random() * 20 + 10;
+    heart.style.width = size + "px";
+    heart.style.height = size + "px";
 
+    heart.style.animationDuration = (Math.random() * 5 + 4) + "s";
+
+    body.appendChild(heart);
+
+    setTimeout(() => {
+        heart.remove();
+    }, 9000);
+}
+
+setInterval(createHeart, 500);
+
+// ==================== Heart Explosion Function ====================
+function createExplosionHeart(x, y) {
+    const heart = document.createElement("div");
+    heart.classList.add("heart");
+
+    const size = Math.random() * 20 + 15;
+    heart.style.width = size + "px";
+    heart.style.height = size + "px";
+    heart.style.background = `linear-gradient(45deg, #ff4d79, #ff99cc)`;
+    heart.style.left = x - size/2 + "px";
+    heart.style.top = y - size/2 + "px";
+    heart.style.position = "absolute";
+    heart.style.transition = "transform 1.5s ease-out, opacity 1.5s ease-out";
+
+    body.appendChild(heart);
+
+    const angle = Math.random() * 2 * Math.PI;
+    const distance = Math.random() * 200 + 100;
+    const destX = distance * Math.cos(angle);
+    const destY = distance * Math.sin(angle);
+
+    setTimeout(() => {
+        heart.style.transform = `translate(${destX}px, ${destY}px) scale(0.5) rotate(${Math.random()*360}deg)`;
+        heart.style.opacity = 0;
+    }, 50);
+
+    setTimeout(() => {
+        heart.remove();
+    }, 1600);
 }
