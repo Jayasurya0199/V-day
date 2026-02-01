@@ -3,12 +3,18 @@ const noButton = document.getElementById("no-button");
 const finalMessage = document.getElementById("final-message");
 const body = document.body;
 
-// ==================== No Button Runs Away ====================
-noButton.addEventListener("mouseover", () => {
+// ==================== No Button Runs Away (Desktop + Mobile) ====================
+function moveNoButton() {
     const x = Math.floor(Math.random() * 200) - 100;
     const y = Math.floor(Math.random() * 200) - 100;
     noButton.style.transform = `translate(${x}px, ${y}px)`;
-});
+}
+
+// Desktop hover
+noButton.addEventListener("mouseover", moveNoButton);
+
+// Mobile touch
+noButton.addEventListener("touchstart", moveNoButton);
 
 // ==================== Yes Button Click ====================
 yesButton.addEventListener("click", () => {
