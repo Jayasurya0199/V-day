@@ -73,8 +73,9 @@ body .container {
 
 /* ==================== No Button Animation ==================== */
 #no-button {
-  cursor: pointer;
-  position: relative;
+    position: absolute; /* important for viewport movement */
+    transition: left 0.1s ease, top 0.1s ease; /* smooth jumps */
+    cursor: pointer; /* keep pointer cursor */
 }
 
 .move {
